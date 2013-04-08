@@ -102,4 +102,26 @@ describe('query view 1',function(){
                       return done()
                   })
        })
+    it('should get docs with include doc'
+      ,function(done){
+           viewer({'db':test_db
+                  ,'view':views[0]
+                  ,'key':[2007,3,5]
+                  ,'reduce':false
+                  ,'include_docs':true
+                  }
+                 ,function(err,docs){
+                      should.not.exist(err)
+                      docs.rows.should.have.property('length',42)
+                      _.each(docs.rows,function(doc){
+                          doc.key.should.eql([2007,3,5])
+                          doc.should.have.property('doc')
+                          var docdoc = doc.doc
+                          docdoc.should.have.property(2007)
+                          docdoc[2007].should.have.property('properties')
+                          docdoc[2007]['properties'][0].should.have.property('geojson')
+                      });
+                      return done()
+                  })
+       })
 })
