@@ -25,8 +25,7 @@ function couchdb_get_view(opts,cb){
     if(reduce !== undefined) query.reduce = reduce
     if(include_docs !== undefined) query.include_docs=include_docs
     var qstring = toQuery(query)
-    var uri = couchdb + '/' + view + '?' + qstring
-    //console.log(uri)
+    var uri = couchdb +'/' + db + '/' + view + '?' + qstring
     superagent
     .get(uri)
     .set('accept','application/json')

@@ -7,7 +7,9 @@
     "couchdb_toQuery": "git://github.com/jmarca/couchdb_toQuery.git",
     "superagent": "~0.12.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+      "should": ""
+  },
   "scripts": {
     "test": "mocha"
   },
