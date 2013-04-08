@@ -38,7 +38,6 @@ describe('query view 1',function(){
     it('should get all missing wim neighbors in district 3, reducing all'
       ,function(done){
            viewer({'db':test_db
-                  ,'doc':'doc1'
                   ,'view':views[0]
                   ,'startkey':[2007, 3]
                   ,'endkey':[2007,3,{}]
@@ -54,7 +53,6 @@ describe('query view 1',function(){
     it('should get all missing wim neighbors in district 3, no reduce'
       ,function(done){
            viewer({'db':test_db
-                  ,'doc':'doc1'
                   ,'view':views[0]
                   ,'startkey':[2007, 3,5]
                   ,'endkey':[2007,3,5,{}]
@@ -72,7 +70,6 @@ describe('query view 1',function(){
     it('should get all missing wim neighbors in district 3, no reduce, using key'
       ,function(done){
            viewer({'db':test_db
-                  ,'doc':'doc1'
                   ,'view':views[0]
                   ,'key':[2007, 3,5]
                   ,'reduce':false
