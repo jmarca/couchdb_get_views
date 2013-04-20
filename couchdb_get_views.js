@@ -16,6 +16,8 @@ function couchdb_get_view(opts,cb){
     var startkey = opts.startkey
     var endkey = opts.endkey
     var reduce = opts.reduce
+    var group = opts.group
+    var group_level = opts.group_level
     var include_docs = opts.include_docs
     var query = {}
     if(startkey !== undefined) query.startkey = startkey
@@ -23,6 +25,8 @@ function couchdb_get_view(opts,cb){
     if(key !== undefined) query.key = key
     if(keys !== undefined) query.keys = keys
     if(reduce !== undefined) query.reduce = reduce
+    if(group !== undefined) query.group = group
+    if(group_level !== undefined) query.group_level = group_level
     if(include_docs !== undefined) query.include_docs=include_docs
     var qstring = toQuery(query)
     var uri = couchdb +'/' + db + '/' + view + '?' + qstring
