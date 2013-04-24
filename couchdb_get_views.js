@@ -19,6 +19,7 @@ function couchdb_get_view(opts,cb){
     var group = opts.group
     var group_level = opts.group_level
     var include_docs = opts.include_docs
+    var limit = opts.limit
     var query = {}
     if(startkey !== undefined) query.startkey = startkey
     if(endkey !== undefined) query.endkey = endkey
@@ -28,6 +29,7 @@ function couchdb_get_view(opts,cb){
     if(group !== undefined) query.group = group
     if(group_level !== undefined) query.group_level = group_level
     if(include_docs !== undefined) query.include_docs=include_docs
+    if(limit !== undefined) query.limit=limit
     var qstring = toQuery(query)
     var uri = couchdb +'/' + db + '/' + view + '?' + qstring
     superagent
