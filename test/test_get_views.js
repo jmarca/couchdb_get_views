@@ -102,6 +102,68 @@ describe('query view 1',function(){
                       return done()
                   })
        })
+    it('should get 10 missing wim neighbors in district 3, no reduce, using keys'
+      ,function(done){
+           viewer({'db':test_db
+                  ,'doc':'doc1'
+                  ,'view':views[0]
+                  ,'keys':[[2007, 3,5],[2008,3,5]]
+                  ,'limit':10
+                  ,'reduce':false
+                  }
+                 ,function(err,docs){
+                      should.not.exist(err)
+                      docs.rows.should.have.property('length',10)
+                      _.each(docs.rows,function(doc){
+                          doc.key[0].should.match(/200(7|8)/)
+                          doc.key[1].should.eql(3)
+                          doc.key[2].should.eql(5)
+                      });
+                      return done()
+                  })
+       })
+    it('should get 1 missing wim neighbors in district 3, no reduce, using keys, descending'
+      ,function(done){
+           viewer({'db':test_db
+                  ,'doc':'doc1'
+                  ,'view':views[0]
+                  ,'startkey':[2007,3,{}] // year, district, freeway
+                  ,'limit':1
+                  ,'descending':true
+                  ,'reduce':false
+                  }
+                 ,function(err,docs){
+                      should.not.exist(err)
+                      docs.rows.should.have.property('length',1)
+                      _.each(docs.rows,function(doc){
+                          doc.key[0].should.match(/2007/)
+                          doc.key[1].should.eql(3)
+                          doc.key[2].should.eql(275) // the last freeway in my testdb
+                      });
+                      return done()
+                  })
+       })
+    it('should get 1 missing wim neighbors in district 3, no reduce, using keys, descending false'
+      ,function(done){
+           viewer({'db':test_db
+                  ,'doc':'doc1'
+                  ,'view':views[0]
+                  ,'startkey':[2007,3,{}] // year, district, freeway
+                  ,'limit':1
+                  ,'descending':false
+                  ,'reduce':false
+                  }
+                 ,function(err,docs){
+                      should.not.exist(err)
+                      docs.rows.should.have.property('length',1)
+                      _.each(docs.rows,function(doc){
+                          doc.key[0].should.match(/2007/)
+                          doc.key[1].should.eql(4) // next one after 3 in my testdb
+                          doc.key[2].should.eql(1) // the first freeway in d4 in my testdb
+                      });
+                      return done()
+                  })
+       })
     it('should get docs with include doc'
       ,function(done){
            viewer({'db':test_db
