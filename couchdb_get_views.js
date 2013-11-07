@@ -24,7 +24,10 @@ function couchdb_get_view(opts,cb){
 
     var cdb = opts.couchdb || server
     var cport = opts.port || port
-    cdb = 'http://'+cdb+':'+cport
+    cdb = cdb+':'+cport
+    if(! /http/.test(cdb)){
+        cdb = 'http://'+cdb
+    }
 
     var query = {}
     if(startkey !== undefined) query.startkey = startkey
