@@ -1,7 +1,7 @@
 var superagent = require('superagent')
 var server = process.env.COUCHDB_HOST || 'localhost'
 var port = process.env.COUCHDB_PORT || 5984
-var couchdb = 'http://'+server+':'+port
+
 
 var toQuery = require('couchdb_toQuery')
 
@@ -21,6 +21,11 @@ function couchdb_get_view(opts,cb){
     var include_docs = opts.include_docs
     var limit = opts.limit
     var descending = opts.descending
+
+    var cdb = opts.couchdb || server
+    var cport = opts.port || port
+    cdb = 'http://'+cdb+':'+cport
+
     var query = {}
     if(startkey !== undefined) query.startkey = startkey
     if(endkey !== undefined) query.endkey = endkey
@@ -33,7 +38,7 @@ function couchdb_get_view(opts,cb){
     if(limit !== undefined) query.limit=limit
     if(descending !== undefined) query.descending=descending
     var qstring = toQuery(query)
-    var uri = couchdb +'/' + db + '/' + view + '?' + qstring
+    var uri = cdb +'/' + db + '/' + view + '?' + qstring
     superagent
     .get(uri)
     .set('accept','application/json')
