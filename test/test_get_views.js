@@ -28,8 +28,6 @@ function create_tempdb(cb){
         [config.couchdb.url+':'+config.couchdb.port
         ,config.couchdb.db].join('/')
 
-    console.log('testing couchdb='+cdb)
-
     superagent.put(cdb)
     .type('json')
     .auth(config.couchdb.auth.username
@@ -77,7 +75,6 @@ before(function(done){
 })
 
 after(function(done){
-    console.log('after')
 
     var cdb =
         config.couchdb.url+':'+config.couchdb.port
