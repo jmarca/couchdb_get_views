@@ -2,20 +2,51 @@
 
 var should = require('should')
 var viewer = require('../.')
+var path    = require('path')
+var rootdir = path.normalize(__dirname)
 
 var _ = require('lodash')
 var superagent = require('superagent')
+var config_okay = require('config_okay')
 
-var env = process.env;
-var cuser = env.COUCHDB_USER ;
-var cpass = env.COUCHDB_PASS ;
-var chost = env.COUCHDB_HOST || 'localhost';
-var cport = env.COUCHDB_PORT || 5984;
+var views = ['_design/imputedchecks/_view/missing_wim_neighbors'
+            ,'_design/vdsml/_view/mainline'
+            ,'_design/properties/_view/segment_length_ml']
 
-var test_db = env.COUCHDB_TESTDB
-if(!test_db){ throw new Error('need valide db defined in environment variable COUCHDB_TESTDB')}
-var couch = 'http://'+chost+':'+cport+'/'+test_db
-console.log('testing couchdb='+couch)
+
+var config={}
+
+function create_tempdb(cb){
+    var date = new Date()
+    // var test_db_unique = [config.couchdb.db,
+    //                       date.getHours(),
+    //                       date.getMinutes(),
+    //                       date.getSeconds(),
+    //                       date.getMilliseconds()].join('-')
+    // config.couchdb.db = test_db_unique
+    var cdb =
+        [config.couchdb.url+':'+config.couchdb.port
+        ,config.couchdb.db].join('/')
+
+    console.log('testing couchdb='+cdb)
+
+    superagent.put(cdb)
+    .type('json')
+    .auth(config.couchdb.auth.username
+         ,config.couchdb.auth.password)
+    .end(function(err,result){
+        if(result.error){
+            // do not delete if we didn't create
+            config.delete_db=false
+        }else{
+            config.delete_db=true
+        }
+        cb()
+    })
+    return null
+}
+
+
 
 /**
  * fixme, I should really create a test db, and populate it with data
@@ -29,18 +60,50 @@ console.log('testing couchdb='+couch)
  */
 
 
-var views = ['_design/imputedchecks/_view/missing_wim_neighbors'
-            ,'_design/vdsml/_view/mainline'
-            ,'_design/properties/_view/segment_length_ml']
 
 describe('query view 1',function(){
 
+
+before(function(done){
+    var config_file = rootdir+'/../test.config.json'
+
+    config_okay(config_file,function(err,c){
+        if(!c.couchdb.db){ throw new Error('need valid db defined in test.config.json')}
+        config = c
+        create_tempdb(done)
+        return null
+    })
+    return null
+})
+
+after(function(done){
+    console.log('after')
+
+    var cdb =
+        config.couchdb.url+':'+config.couchdb.port
+             + '/'+ config.couchdb.db
+    if(config.delete_db){
+        superagent.del(cdb)
+        .type('json')
+        .auth(config.couchdb.auth.username
+             ,config.couchdb.auth.password)
+        .end(function(e,r){
+            return done()
+        })
+        return null
+    }else{
+        console.log("not deleting what I didn't create:" + cdb)
+        return done()
+    }
+})
     it('should get all missing wim neighbors in district 3, reducing all'
       ,function(done){
-           viewer({'db':test_db
+           viewer({'db':config.couchdb.db
                   ,'view':views[0]
                   ,'startkey':[2007, 3]
                   ,'endkey':[2007,3,{}]
+                  ,'couchdb': config.couchdb.url
+                  ,'port':config.couchdb.port
                   }
                  ,function(err,docs){
                       should.not.exist(err)
@@ -52,7 +115,7 @@ describe('query view 1',function(){
        })
     it('should get all missing wim neighbors in district 3, no reduce'
       ,function(done){
-           viewer({'db':test_db
+           viewer({'db':config.couchdb.db
                   ,'view':views[0]
                   ,'startkey':[2007, 3,5]
                   ,'endkey':[2007,3,5,{}]
@@ -69,7 +132,7 @@ describe('query view 1',function(){
        })
     it('should get all missing wim neighbors in district 3, no reduce, using key'
       ,function(done){
-           viewer({'db':test_db
+           viewer({'db':config.couchdb.db
                   ,'view':views[0]
                   ,'key':[2007, 3,5]
                   ,'reduce':false
@@ -85,7 +148,7 @@ describe('query view 1',function(){
        })
     it('should get all missing wim neighbors in district 3, no reduce, using keys'
       ,function(done){
-           viewer({'db':test_db
+           viewer({'db':config.couchdb.db
                   ,'doc':'doc1'
                   ,'view':views[0]
                   ,'keys':[[2007, 3,5],[2008,3,5]]
@@ -104,7 +167,7 @@ describe('query view 1',function(){
        })
     it('should get 10 missing wim neighbors in district 3, no reduce, using keys'
       ,function(done){
-           viewer({'db':test_db
+           viewer({'db':config.couchdb.db
                   ,'doc':'doc1'
                   ,'view':views[0]
                   ,'keys':[[2007, 3,5],[2008,3,5]]
@@ -124,7 +187,7 @@ describe('query view 1',function(){
        })
     it('should get 1 missing wim neighbors in district 3, no reduce, using keys, descending'
       ,function(done){
-           viewer({'db':test_db
+           viewer({'db':config.couchdb.db
                   ,'doc':'doc1'
                   ,'view':views[0]
                   ,'startkey':[2007,3,{}] // year, district, freeway
@@ -145,7 +208,7 @@ describe('query view 1',function(){
        })
     it('should get 1 missing wim neighbors in district 3, no reduce, using keys, descending false'
       ,function(done){
-           viewer({'db':test_db
+           viewer({'db':config.couchdb.db
                   ,'doc':'doc1'
                   ,'view':views[0]
                   ,'startkey':[2007,3,{}] // year, district, freeway
@@ -166,7 +229,7 @@ describe('query view 1',function(){
        })
     it('should get docs with include doc'
       ,function(done){
-           viewer({'db':test_db
+           viewer({'db':config.couchdb.db
                   ,'view':views[0]
                   ,'key':[2007,3,5]
                   ,'reduce':false

@@ -1,14 +1,16 @@
 {
   "name": "couchdb_get_views",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Helper to query views from CouchDB",
   "main": "couchdb_get_views.js",
   "dependencies": {
     "couchdb_toQuery": "git://github.com/jmarca/couchdb_toQuery.git",
-    "superagent": "~0.12.0"
+    "config_okay":"",
+    "superagent": ""
   },
   "devDependencies": {
-      "should": ""
+      "should": "",
+      "couchdb_put_view":"git://github.com/jmarca/couchdb_put_view.git"
   },
   "scripts": {
     "test": "mocha"
