@@ -50,7 +50,7 @@ function _couchdb_get_view(opts,cb){
     if(descending !== undefined) query.descending=descending
     var qstring = toQuery(query)
     var uri = cdb +'/' + db + '/' + view + '?' + qstring
-    console.log(uri)
+
     superagent
     .get(uri)
     .set('accept','application/json')
