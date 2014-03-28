@@ -95,13 +95,12 @@ after(function(done){
 })
     it('should get all missing wim neighbors in district 3, reducing all'
       ,function(done){
-           viewer({'db':config.couchdb.db
-                  ,'view':views[0]
-                  ,'startkey':[2007, 3]
-                  ,'endkey':[2007,3,{}]
-                  ,'couchdb': config.couchdb.url
-                  ,'port':config.couchdb.port
-                  }
+           viewer(_.assign({}
+                          ,config.couchdb
+                          ,{'view':views[0]
+                           ,'startkey':[2007, 3]
+                           ,'endkey':[2007,3,{}]
+                           })
                  ,function(err,docs){
                       should.not.exist(err)
                       docs.should.eql({"rows":[
@@ -112,12 +111,13 @@ after(function(done){
        })
     it('should get all missing wim neighbors in district 3, no reduce'
       ,function(done){
-           viewer({'db':config.couchdb.db
-                  ,'view':views[0]
-                  ,'startkey':[2007, 3,5]
-                  ,'endkey':[2007,3,5,{}]
-                  ,'reduce':false
-                  }
+           viewer(_.assign({}
+                          ,config.couchdb
+                          ,{'view':views[0]
+                           ,'startkey':[2007, 3,5]
+                           ,'endkey':[2007,3,5,{}]
+                           ,'reduce':false
+                           })
                  ,function(err,docs){
                       should.not.exist(err)
                       docs.rows.should.have.property('length',42)
@@ -129,11 +129,12 @@ after(function(done){
        })
     it('should get all missing wim neighbors in district 3, no reduce, using key'
       ,function(done){
-           viewer({'db':config.couchdb.db
-                  ,'view':views[0]
-                  ,'key':[2007, 3,5]
-                  ,'reduce':false
-                  }
+           viewer(_.assign({}
+                          ,config.couchdb
+                          ,{'view':views[0]
+                           ,'key':[2007, 3,5]
+                           ,'reduce':false
+                           })
                  ,function(err,docs){
                       should.not.exist(err)
                       docs.rows.should.have.property('length',42)
@@ -145,12 +146,13 @@ after(function(done){
        })
     it('should get all missing wim neighbors in district 3, no reduce, using keys'
       ,function(done){
-           viewer({'db':config.couchdb.db
-                  ,'doc':'doc1'
-                  ,'view':views[0]
-                  ,'keys':[[2007, 3,5],[2008,3,5]]
-                  ,'reduce':false
-                  }
+           viewer(_.assign({}
+                          ,config.couchdb
+                          ,{'doc':'doc1'
+                           ,'view':views[0]
+                           ,'keys':[[2007, 3,5],[2008,3,5]]
+                           ,'reduce':false
+                           })
                  ,function(err,docs){
                       should.not.exist(err)
                       docs.rows.should.have.property('length',82)
@@ -164,13 +166,14 @@ after(function(done){
        })
     it('should get 10 missing wim neighbors in district 3, no reduce, using keys'
       ,function(done){
-           viewer({'db':config.couchdb.db
-                  ,'doc':'doc1'
-                  ,'view':views[0]
-                  ,'keys':[[2007, 3,5],[2008,3,5]]
-                  ,'limit':10
-                  ,'reduce':false
-                  }
+           viewer(_.assign({}
+                          ,config.couchdb
+                          ,{'doc':'doc1'
+                           ,'view':views[0]
+                           ,'keys':[[2007, 3,5],[2008,3,5]]
+                           ,'limit':10
+                           ,'reduce':false
+                           })
                  ,function(err,docs){
                       should.not.exist(err)
                       docs.rows.should.have.property('length',10)
@@ -184,14 +187,15 @@ after(function(done){
        })
     it('should get 1 missing wim neighbors in district 3, no reduce, using keys, descending'
       ,function(done){
-           viewer({'db':config.couchdb.db
-                  ,'doc':'doc1'
-                  ,'view':views[0]
-                  ,'startkey':[2007,3,{}] // year, district, freeway
-                  ,'limit':1
-                  ,'descending':true
-                  ,'reduce':false
-                  }
+           viewer(_.assign({}
+                          ,config.couchdb
+                          ,{'doc':'doc1'
+                           ,'view':views[0]
+                           ,'startkey':[2007,3,{}] // year, district, freeway
+                           ,'limit':1
+                           ,'descending':true
+                           ,'reduce':false
+                           })
                  ,function(err,docs){
                       should.not.exist(err)
                       docs.rows.should.have.property('length',1)
@@ -205,14 +209,15 @@ after(function(done){
        })
     it('should get 1 missing wim neighbors in district 3, no reduce, using keys, descending false'
       ,function(done){
-           viewer({'db':config.couchdb.db
-                  ,'doc':'doc1'
-                  ,'view':views[0]
-                  ,'startkey':[2007,3,{}] // year, district, freeway
-                  ,'limit':1
-                  ,'descending':false
-                  ,'reduce':false
-                  }
+           viewer(_.assign({}
+                          ,config.couchdb
+                          ,{'doc':'doc1'
+                           ,'view':views[0]
+                           ,'startkey':[2007,3,{}] // year, district, freeway
+                           ,'limit':1
+                           ,'descending':false
+                           ,'reduce':false
+                           })
                  ,function(err,docs){
                       should.not.exist(err)
                       docs.rows.should.have.property('length',1)
@@ -226,20 +231,20 @@ after(function(done){
        })
     it('should get docs with include doc'
       ,function(done){
-           viewer({'db':config.couchdb.db
-                  ,'view':views[0]
-                  ,'key':[2007,3,5]
-                  ,'reduce':false
-                  ,'include_docs':true
-                  }
+           viewer(_.assign({}
+                          ,config.couchdb
+                          ,{'view':views[0]
+                           ,'key':[2007,3,5]
+                           ,'reduce':false
+                           ,'include_docs':true
+                           })
                  ,function(err,docs){
                       should.not.exist(err)
                       docs.rows.should.have.property('length',42)
                       _.each(docs.rows,function(doc){
                           doc.key.should.eql([2007,3,5])
-                          doc.should.have.property('doc')
                           var docdoc = doc.doc
-                          docdoc.should.have.property(2007)
+                          docdoc.should.have.property('2007')
                           docdoc[2007].should.have.property('properties')
                           docdoc[2007]['properties'][0].should.have.property('geojson')
                       });

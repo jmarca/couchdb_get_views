@@ -5,12 +5,13 @@
   "main": "couchdb_get_views.js",
   "dependencies": {
     "couchdb_toQuery": "git://github.com/jmarca/couchdb_toQuery.git",
-    "config_okay":"",
-    "superagent": ""
+    "config_okay": "",
+    "superagent": "",
+    "lodash": "^2.4.1"
   },
   "devDependencies": {
-      "should": "",
-      "couchdb_put_view":"git://github.com/jmarca/couchdb_put_view.git"
+    "should": "",
+    "couchdb_put_view": "git://github.com/jmarca/couchdb_put_view.git"
   },
   "scripts": {
     "test": "mocha"

@@ -1,15 +1,18 @@
 var superagent = require('superagent')
-var config={}
+var config={'couchdb':{}}
 var config_okay = require('config_okay')
 var toQuery = require('couchdb_toQuery')
+var _ = require('lodash')
+
 
 function couchdb_get_view(opts,cb){
-    if(config.couchdb === undefined && opts.config_file !== undefined){
+    if(config.couchdb.url === undefined && opts.config_file !== undefined){
         return config_okay(opts.config_file,function(e,c){
             config.couchdb = c.couchdb
             return _couchdb_get_view(opts,cb)
         })
     }
+
     // otherwise, hopefully everything is defined in the opts file!
     return _couchdb_get_view(opts,cb)
 }
@@ -18,7 +21,9 @@ function couchdb_get_view(opts,cb){
  * I'm not going to protect you from being an idiot.
  */
 function _couchdb_get_view(opts,cb){
-    var db = opts.db
+    var c = {}
+    _.assign(c,config.couchdb,opts)
+    var db = c.db
     var view = opts.view || '_all_docs'
     var key = opts.key
     var keys = opts.keys
@@ -30,9 +35,13 @@ function _couchdb_get_view(opts,cb){
     var include_docs = opts.include_docs
     var limit = opts.limit
     var descending = opts.descending
+    if(opts.couchdb !== undefined){
+        console.log('hey, you are using an old way of doing this')
+        c.url = opts.couchdb
+    }
 
-    var cdb = opts.couchdb || '127.0.0.1'
-    var cport = opts.port  || 5984
+    var cdb = c.url || '127.0.0.1'
+    var cport = c.port || 5984
     cdb = cdb+':'+cport
     if(! /http/.test(cdb)){
         cdb = 'http://'+cdb
@@ -50,7 +59,6 @@ function _couchdb_get_view(opts,cb){
     if(descending !== undefined) query.descending=descending
     var qstring = toQuery(query)
     var uri = cdb +'/' + db + '/' + view + '?' + qstring
-
     superagent
     .get(uri)
     .set('accept','application/json')
