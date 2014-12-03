@@ -1,5 +1,6 @@
 var superagent = require('superagent')
 var config={'couchdb':{}}
+var config_okay = require('config_okay')
 var toQuery = require('couchdb_toQuery')
 var _ = require('lodash')
 
