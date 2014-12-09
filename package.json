@@ -1,6 +1,6 @@
 {
   "name": "couchdb_get_views",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "Helper to query views from CouchDB",
   "main": "couchdb_get_views.js",
   "dependencies": {
