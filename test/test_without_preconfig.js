@@ -68,8 +68,9 @@ describe('query view 1',function(){
         config_okay(config_file,function(err,c){
             if(!c.couchdb.db){ throw new Error('need valid db defined in test.config.json')}
             config = c
-            create_tempdb(done)
-            return null
+            //create_tempdb(done)
+            //return null
+            return done()
         })
         return null
     })
@@ -79,19 +80,19 @@ describe('query view 1',function(){
         var cdb =
             config.couchdb.url+':'+config.couchdb.port
                  + '/'+ config.couchdb.db
-        if(config.delete_db){
-            superagent.del(cdb)
-            .type('json')
-            .auth(config.couchdb.auth.username
-                 ,config.couchdb.auth.password)
-            .end(function(e,r){
-                return done()
-            })
-            return null
-        }else{
+        // if(config.delete_db){
+        //     superagent.del(cdb)
+        //     .type('json')
+        //     .auth(config.couchdb.auth.username
+        //          ,config.couchdb.auth.password)
+        //     .end(function(e,r){
+        //         return done()
+        //     })
+        //     return null
+        // }else{
             console.log("not deleting what I didn't create:" + cdb)
             return done()
-        }
+        //        }
     })
     it('should get all missing wim neighbors in district 3, reducing all'
       ,function(done){
