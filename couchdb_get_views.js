@@ -6,7 +6,7 @@ var _ = require('lodash')
 
 
 function couchdb_get_view(opts,cb){
-    if(config.couchdb.url === undefined && opts.config_file !== undefined){
+    if(config.couchdb.host === undefined && opts.config_file !== undefined){
         return config_okay(opts.config_file,function(e,c){
             config.couchdb = c.couchdb
             return _couchdb_get_view(opts,cb)
@@ -36,11 +36,10 @@ function _couchdb_get_view(opts,cb){
     var limit = opts.limit
     var descending = opts.descending
     if(opts.couchdb !== undefined){
-        console.log('hey, you are using an old way of doing this')
-        c.url = opts.couchdb
+        throw new Error('hey, you are using an old way of doing this')
     }
 
-    var cdb = c.url || '127.0.0.1'
+    var cdb = c.host || '127.0.0.1'
     var cport = c.port || 5984
     cdb = cdb+':'+cport
     if(! /http/.test(cdb)){
