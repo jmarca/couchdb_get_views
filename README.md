@@ -1,5 +1,7 @@
 # Get views from CouchDB
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/jmarca/couchdb_get_views.svg)](https://greenkeeper.io/)
+
 This is a module to simplify getting view output from CouchDB.  Pass
 in your view and query parameters, and it will return the response.
 If you are an idiot and do something stupid, this module will not
