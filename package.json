@@ -7,7 +7,7 @@
     "couchdb_toQuery": "git://github.com/jmarca/couchdb_toQuery.git",
     "config_okay": "",
     "superagent": "",
-    "lodash": "^2.4.1"
+    "lodash": "^4.17.4"
   },
   "devDependencies": {
     "should": "",
