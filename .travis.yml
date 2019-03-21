@@ -6,12 +6,7 @@ node_js:
 
 
 env:
-  - COUCHDB_VERSION=2.3.1 COUCHDB_USER=james COUCHDB_PASSWORD=grobblefruit
-
-
-addons:
-  code_climate:
-    repo_token: 0dd12b881de5b91865a756ee452c267895934cb9c7ac9bf43ddb440bbdd3c39a
+  - COUCHDB_VERSION=2.3.1 COUCHDB_USER=james COUCHDB_PASSWORD=grobblefruit - CC_TEST_REPORTER_ID=0dd12b881de5b91865a756ee452c267895934cb9c7ac9bf43ddb440bbdd3c39a
 
 
 services:
@@ -29,6 +24,9 @@ before_script:
   - 'curl -H "Content-Type: application/json" -X PUT http://${COUCHDB_USER}:${COUCHDB_PASSWORD}@localhost:5984/newdb'
   - 'curl -d @test/bulkdocs.json -H "Content-Type: application/json" -X POST http://${COUCHDB_USER}:${COUCHDB_PASSWORD}@localhost:5984/newdb/_bulk_docs'
   - 'curl -d @test/designdocs.json -H "Content-Type: application/json" -X POST http://${COUCHDB_USER}:${COUCHDB_PASSWORD}@localhost:5984/newdb/_bulk_docs'
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter/
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
 
 
 notifications:
@@ -37,5 +35,4 @@ notifications:
     on_failure: change
 
 after_success:
-  - npm install codeclimate-test-reporter
-  - ./node_modules/.bin/tap --coverage-report=text-lcov | ./node_modules/.bin/codeclimate-test-reporter
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
