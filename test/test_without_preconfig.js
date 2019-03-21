@@ -1,51 +1,22 @@
 /* global require console process describe it */
 
-var should = require('should')
-var viewer = require('../.')
-var path    = require('path')
-var rootdir = path.normalize(__dirname)
+const tap = require('tap')
 
-//var _ = require('lodash')
-var superagent = require('superagent')
-var config_okay = require('config_okay')
+const path    = require('path')
+const rootdir = path.normalize(__dirname)
 
-var views = ['_design/imputedchecks/_view/missing_wim_neighbors'
-            ,'_design/vdsml/_view/mainline'
-            ,'_design/properties/_view/segment_length_ml']
+const config_file = rootdir+'/../test.config.json'
+const config_okay = require('config_okay')
+const viewer = require('../.')
+const superagent = require('superagent')
+const  _ = require('lodash')
 
-var config_file = rootdir+'/../test.config.json'
-var config={}
+const utils = require('./utils.js')
 
-function create_tempdb(cb){
-    var date = new Date()
-    // var test_db_unique = [config.couchdb.db,
-    //                       date.getHours(),
-    //                       date.getMinutes(),
-    //                       date.getSeconds(),
-    //                       date.getMilliseconds()].join('-')
-    // config.couchdb.db = test_db_unique
-    var cdb =
-        [config.couchdb.url+':'+config.couchdb.port
-        ,config.couchdb.db].join('/')
-
-
-    superagent.put(cdb)
-    .type('json')
-    .auth(config.couchdb.auth.username
-         ,config.couchdb.auth.password)
-    .end(function(err,result){
-        if(result.error){
-            // do not delete if we didn't create
-            config.delete_db=false
-        }else{
-            config.delete_db=true
-        }
-        cb()
-    })
-    return null
-}
-
-
+// tap.plan(6)
+const views = ['_design/imputedchecks/_view/missing_wim_neighbors'
+               ,'_design/vdsml/_view/mainline'
+               ,'_design/properties/_view/segment_length_ml']
 
 /**
  * fixme, I should really create a test db, and populate it with data
@@ -59,56 +30,30 @@ function create_tempdb(cb){
  */
 
 
-
-describe('query view 1',function(){
-
-
-    before(function(done){
-
-        config_okay(config_file,function(err,c){
-            if(!c.couchdb.db){ throw new Error('need valid db defined in test.config.json')}
-            config = c
-            //create_tempdb(done)
-            //return null
-            return done()
-        })
-        return null
-    })
-
-    after(function(done){
-
-        var cdb =
-            config.couchdb.url+':'+config.couchdb.port
-                 + '/'+ config.couchdb.db
-        // if(config.delete_db){
-        //     superagent.del(cdb)
-        //     .type('json')
-        //     .auth(config.couchdb.auth.username
-        //          ,config.couchdb.auth.password)
-        //     .end(function(e,r){
-        //         return done()
-        //     })
-        //     return null
-        // }else{
-            console.log("not deleting what I didn't create:" + cdb)
-            return done()
-        //        }
-    })
-    it('should get all missing wim neighbors in district 3, reducing all'
-      ,function(done){
-           viewer({'view':views[0]
-                  ,'startkey':[2007, 3]
-                  ,'endkey':[2007,3,{}]
-                  ,'config_file': config_file
-
-                  }
-                 ,function(err,docs){
-                      should.not.exist(err)
-                      docs.should.eql({"rows":[
-                          {"key":null,"value":294}
-                      ]})
-                      return done()
-                  })
-
+config_okay(config_file)
+    // .then(async (config)=>{
+    //     //await utils.create_tempdb(config)
+    //     return config
+    // })
+    .then( async (config) => {
+        await tap.test('should get all missing wim neighbors in district 10, reducing all'
+                       , t => {
+                           utils.promise_wrapper(viewer,
+                                                 {'view':views[0]
+                                                  ,'startkey':[2007, 10]
+                                                  ,'endkey':[2007,10,{}]
+                                                  ,'config_file': config_file
+                                                 })
+                               .then( docs =>{
+                                   console.log(docs)
+                                   t.same(docs,{"rows":[
+                                       {"key":null,"value":80}
+                                   ]})
+                                   return t.end()
+                               })
+                               .catch( e => {
+                                   console.log('error',e)
+                                   t.fail()
+                               })
+                       })
        })
-})

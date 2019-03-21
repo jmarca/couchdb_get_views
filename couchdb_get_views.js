@@ -7,14 +7,20 @@ var _ = require('lodash')
 
 function couchdb_get_view(opts,cb){
     if(config.couchdb.host === undefined && opts.config_file !== undefined){
-        return config_okay(opts.config_file,function(e,c){
-            config.couchdb = c.couchdb
-            return _couchdb_get_view(opts,cb)
-        })
-    }
+        config_okay(opts.config_file)
+            .then(c =>{
+                config.couchdb = c.couchdb
+                return _couchdb_get_view(opts,cb)
+            })
+            .catch( e => {
+                console.log('error reading config file?',e)
+                throw(e)
+            })
+    }else{
 
-    // otherwise, hopefully everything is defined in the opts file!
-    return _couchdb_get_view(opts,cb)
+        // otherwise, hopefully everything is defined in the opts file!
+        return _couchdb_get_view(opts,cb)
+    }
 }
 
 /**

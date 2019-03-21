@@ -1,7 +1,5 @@
 /* global require console process describe it */
 
-const fs     = require('fs')
-
 const tap = require('tap')
 
 const path    = require('path')
@@ -37,7 +35,6 @@ config_okay(config_file)
                                                             ,'endkey':[2007,10,{}]
                                                            }))
                                .then( docs =>{
-                                   console.log(docs)
                                    t.same(docs,{"rows":[
                                        {"key":null,"value":80}
                                    ]})
