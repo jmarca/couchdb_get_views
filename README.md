@@ -1,4 +1,10 @@
-[![Build Status](https://travis-ci.org/jmarca/couchdb_get_views.svg?branch=master)](https://travis-ci.org/jmarca/couchdb_get_views) [![Greenkeeper badge](https://badges.greenkeeper.io/jmarca/couchdb_get_views.svg)](https://greenkeeper.io/)
+[![Build
+Status](https://travis-ci.org/jmarca/couchdb_get_views.svg?branch=master)](https://travis-ci.org/jmarca/couchdb_get_views)
+[![Greenkeeper
+badge](https://badges.greenkeeper.io/jmarca/couchdb_get_views.svg)](https://greenkeeper.io/)
+[![Test
+Coverage](https://api.codeclimate.com/v1/badges/e9b0f604912ba41ff7d3/test_coverage)](https://codeclimate.com/github/jmarca/couchdb_get_views/test_coverage)
+
 
 # Get views from CouchDB
 
