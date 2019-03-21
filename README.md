@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/jmarca/couchdb_get_views.svg?branch=master)](https://travis-ci.org/jmarca/couchdb_get_views)
+[![Build Status](https://travis-ci.org/jmarca/couchdb_get_views.svg?branch=master)](https://travis-ci.org/jmarca/couchdb_get_views) [![Greenkeeper badge](https://badges.greenkeeper.io/jmarca/couchdb_get_views.svg)](https://greenkeeper.io/)
 
 # Get views from CouchDB
 
