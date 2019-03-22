@@ -10,7 +10,7 @@ env:
     - COUCHDB_VERSION=2.3.1
     - COUCHDB_USER=james
     - COUCHDB_PASSWORD=grobblefruit
-    - CC_TEST_REPORTER_ID=0dd12b881de5b91865a756ee452c267895934cb9c7ac9bf43ddb440bbdd3c39a
+    - CC_TEST_REPORTER_ID=29364c74052afff3393f906b18052aa423016cd487fc6d13caedad491d366848
 
 
 services:
@@ -39,5 +39,6 @@ notifications:
     on_failure: change
 
 after_script:
-  - ./node_modules/.bin/tap --coverage-report=text-lcov && ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+  - ./node_modules/.bin/tap --coverage-report=text-lcov
+  - ./cc-test-reporter after-build  -t lcov --debug --exit-code $TRAVIS_TEST_RESULT
   # - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
