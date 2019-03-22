@@ -35,5 +35,5 @@ notifications:
     on_failure: change
 
 after_success:
-  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
-  # - ./node_modules/.bin/tap --coverage-report=text-lcov | ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+  # - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+  - ./node_modules/.bin/tap --coverage-report=text-lcov | ./cc-test-reporter after-build
