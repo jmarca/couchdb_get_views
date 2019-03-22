@@ -6,7 +6,11 @@ node_js:
 
 
 env:
-  - COUCHDB_VERSION=2.3.1 COUCHDB_USER=james COUCHDB_PASSWORD=grobblefruit CC_TEST_REPORTER_ID=0dd12b881de5b91865a756ee452c267895934cb9c7ac9bf43ddb440bbdd3c39a
+  global:
+    - COUCHDB_VERSION=2.3.1
+    - COUCHDB_USER=james
+    - COUCHDB_PASSWORD=grobblefruit
+    - CC_TEST_REPORTER_ID=0dd12b881de5b91865a756ee452c267895934cb9c7ac9bf43ddb440bbdd3c39a
 
 
 services:
@@ -34,6 +38,6 @@ notifications:
     on_success: change
     on_failure: change
 
-after_success:
+after_script:
+  - ./node_modules/.bin/tap --coverage-report=text-lcov && ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
   # - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
-  - ./node_modules/.bin/tap --coverage-report=text-lcov | ./cc-test-reporter after-build
