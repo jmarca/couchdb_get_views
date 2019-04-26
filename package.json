@@ -11,7 +11,7 @@
   },
   "devDependencies": {
       "couchdb_put_view": "git://github.com/jmarca/couchdb_put_view.git",
-      "tap": "^12.6.0"
+      "tap": "^13.0.0"
   },
   "scripts": {
     "test": "tap --cov test/test*.js"
