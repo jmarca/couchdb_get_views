@@ -6,12 +6,12 @@
   "dependencies": {
     "config_okay": "^1.0.1",
     "couchdb_toQuery": "git://github.com/jmarca/couchdb_toQuery.git",
-    "lodash": "^4.17.11",
-    "superagent": "^5.0.2"
+    "lodash": "^4.17.14",
+    "superagent": "^5.1.0"
   },
   "devDependencies": {
-      "couchdb_put_view": "git://github.com/jmarca/couchdb_put_view.git",
-      "tap": "^14.0.0"
+    "couchdb_put_view": "git://github.com/jmarca/couchdb_put_view.git",
+    "tap": "^14.4.1"
   },
   "scripts": {
     "test": "tap --cov test/test*.js"
