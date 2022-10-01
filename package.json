@@ -7,7 +7,7 @@
     "config_okay": "^1.0.1",
     "couchdb_toQuery": "git://github.com/jmarca/couchdb_toQuery.git",
     "lodash": "^4.17.21",
-    "snyk": "^1.685.0",
+    "snyk": "^1.996.0",
     "superagent": "^5.3.1"
   },
   "devDependencies": {
